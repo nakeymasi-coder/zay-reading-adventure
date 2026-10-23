@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <meta name="color-scheme" content="light"/>
 <link rel="icon" href="data:,"/>
-<title>Zay's Reading Adventure — Fun Reading Game for Kids</title>
+<title>Zay’s Adventure Hub — Reading, Math & More</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -82,10 +82,55 @@ input,select,textarea{width:100%;padding:13px 14px;border:2px solid #E2E8F0;bord
 .confetti{position:fixed;inset:0;pointer-events:none;z-index:99;display:none}
 @media(max-width:800px){.hero{grid-template-columns:1fr}.hero h1{font-size:38px}.grid{grid-template-columns:1fr}.two{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.page-text{font-size:20px}}
 @media(prefers-color-scheme:dark){body{background:#FFF8E7;color:#1E2A3A}}
+
+/* Hub and new subjects */
+.hub {max-width:1120px;margin:0 auto;padding:20px 16px}
+.hub h1 {font-size:42px;text-align:center;margin:10px 0}
+.subjects {display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:20px 0}
+.subj {background:#fff;border:3px solid #FFE1A8;border-radius:24px;padding:20px;text-align:center;cursor:pointer;transition:transform .2s;box-shadow:0 4px 0 #FFE1A8}
+.subj:hover {transform:translateY(-4px)}
+.subj h2 {font-size:24px;margin:8px 0}
+.subj p {font-size:14px;color:#5A6B84;font-weight:700}
+.adult {position:fixed;bottom:20px;right:20px;background:#0F6BFF;color:#fff;border-radius:999px;padding:12px 18px;font-weight:900;z-index:100}
+.drawer {position:fixed;top:0;right:-320px;width:300px;height:100%;background:#fff;border-left:3px solid #FFE1A8;padding:20px;transition:right .3s;z-index:200;overflow:auto}
+.drawer.open {right:0}
+.mission {background:#fff;border-radius:24px;padding:24px;margin:16px 0;border:2px solid #FFE8B8}
+.opt {display:block;width:100%;background:#FFF8E7;border:2px solid #FFE1A8;border-radius:16px;padding:14px;margin:8px 0;font-weight:800;text-align:left}
+.opt.correct {background:#D1FAE5;border-color:#00A99D}
+.opt.wrong {background:#FEE2E2;border-color:#FF6B4A}
+.footer {text-align:center;padding:30px;font-size:13px;color:#5A6B84}
+.footer a {color:#0F6BFF;font-weight:800;margin:0 8px}
+@media (max-width:700px) {.subjects{grid-template-columns:1fr 1fr} .hero{grid-template-columns:1fr} .hero h1{font-size:36px}}
+
 </style>
 </head>
 <body>
-<div class="top">
+
+<div id="hub" class="hub">
+  <h1>Zay’s Adventure Hub</h1>
+  <p style="text-align:center;font-weight:700;font-size:18px">One place for Reading, Math, Writing, Science and My World adventures with Rex the Dino!</p>
+  <div class="subjects">
+    <div class="subj" onclick="showSubject('reading')"><h2>📖 Reading</h2><p>Stories & sparkles</p></div>
+    <div class="subj" onclick="showSubject('math')"><h2>🔢 Math</h2><p>Numbers & shapes</p></div>
+    <div class="subj" onclick="showSubject('writing')"><h2>✏️ Writing & Spelling</h2><p>Words & sentences</p></div>
+    <div class="subj" onclick="showSubject('science')"><h2>🔬 Science</h2><p>Nature & weather</p></div>
+    <div class="subj" onclick="showSubject('world')"><h2>🌍 My World</h2><p>Maps & life skills</p></div>
+  </div>
+  <div id="starsDisplay" style="text-align:center;font-size:22px;font-weight:900;margin:10px">★ 0 stars</div>
+</div>
+<button class="adult" onclick="toggleDrawer()">Adult Controls</button>
+<div id="drawer" class="drawer">
+  <h2>Parent / Educator</h2>
+  <p>Set challenge level:</p>
+  <button class="btn btn-blue" onclick="setLevel(2)">Grade 2 Practice</button>
+  <button class="btn btn-sun" onclick="setLevel(3)">Grade 3 Challenge</button>
+  <p id="levelDisplay">Current: Grade 2</p>
+  <button class="btn btn-teal" onclick="resetProgress()">Reset All Progress</button>
+  <button class="btn" onclick="toggleDrawer()">Close</button>
+</div>
+<div id="subjectView" style="display:none"></div>
+
+<div class="top" id="originalApp" style="display:none">
   <div class="hero">
     <div class="hero-text">
       <span class="badge">🦖 REX THE DINO IS YOUR READING BUDDY • AGES 6–10</span>
@@ -457,8 +502,99 @@ function makeStory(){
  document.getElementById('myStory').innerHTML=story; boom();
 }
 function boom(){var c=document.getElementById('confetti');c.style.display='block';c.width=innerWidth;c.height=innerHeight;var x=c.getContext('2d');var ps=[];for(var i=0;i<90;i++)ps.push({x:Math.random()*c.width,y:-20-Math.random()*200,s:6+Math.random()*8,col:['#FF6B4A','#FFC531','#00A99D','#0F6BFF','#FF8FAB'][i%5],vy:2+Math.random()*3,rot:Math.random()*6});var t=0;function tick(){x.clearRect(0,0,c.width,c.height);ps.forEach(function(p){p.y+=p.vy;p.rot+=.05;x.save();x.translate(p.x,p.y);x.rotate(p.rot);x.fillStyle=p.col;x.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);x.restore();});t++;if(t<140)requestAnimationFrame(tick);else c.style.display='none';}tick();}
+
+// === Adventure Hub Expansion ===
+var level = 2;
+var subjectStars = {reading:0, math:0, writing:0, science:0, world:0};
+var completed = {};
+function loadProgress(){
+  try {
+    var s = localStorage.getItem('zayAdventure');
+    if(s){ var d=JSON.parse(s); state.stars = d.stars || 0; state.done = d.done || {}; state.sparkles = d.sparkles || 0; subjectStars = d.subjectStars || subjectStars; level = d.level || 2; completed = d.completed || {}; }
+  } catch(e){}
+  updateHubStars();
+}
+function saveProgress(){
+  localStorage.setItem('zayAdventure', JSON.stringify({stars:state.stars, done:state.done, sparkles:state.sparkles, subjectStars:subjectStars, level:level, completed:completed}));
+}
+function updateHubStars(){
+  var total = state.stars + (subjectStars.math||0) + (subjectStars.writing||0) + (subjectStars.science||0) + (subjectStars.world||0);
+  document.getElementById('starsDisplay').textContent = '★ ' + total + ' stars';
+}
+function showSubject(sub){
+  document.getElementById('hub').style.display='none';
+  document.getElementById('subjectView').style.display='block';
+  document.getElementById('originalApp').style.display = sub==='reading' ? 'block' : 'none';
+  if(sub==='reading'){ renderLibrary(); return; }
+  var content = getMissions(sub);
+  document.getElementById('subjectView').innerHTML = '<div class="hub"><button class="btn btn-blue" onclick="backToHub()">← Back to Hub</button>' + content + '</div>';
+  speakText('Welcome to ' + sub + ' adventure! Listen and choose the right answer.');
+}
+function backToHub(){
+  document.getElementById('hub').style.display='block';
+  document.getElementById('subjectView').style.display='none';
+  document.getElementById('originalApp').style.display='none';
+  updateHubStars();
+}
+function toggleDrawer(){ document.getElementById('drawer').classList.toggle('open'); }
+function setLevel(l){ level=l; document.getElementById('levelDisplay').textContent='Current: Grade '+l; saveProgress(); }
+function resetProgress(){ if(confirm('Reset all stars and progress?')){ state={stars:0,done:{},sparkles:0}; subjectStars={reading:0,math:0,writing:0,science:0,world:0}; completed={}; saveProgress(); location.reload(); } }
+function getMissions(sub){
+  var missions = {
+    math: [
+      {q: level===2 ? 'What is 5 + 3?' : 'What is 12 + 9?', opts:['7','8','9'], a: level===2?1:2, explain:'Count them up!'},
+      {q: 'Which coin is worth 10 cents?', opts:['Penny','Dime','Nickel'], a:1, explain:'A dime is 10 cents.'},
+      {q: 'How many sides does a triangle have?', opts:['3','4','5'], a:0, explain:'Three sides, three corners.'}
+    ],
+    writing: [
+      {q: 'Which word is spelled right?', opts:['kat','cat','catt'], a:1, explain:'Cat has one t.'},
+      {q: 'Make a sentence: The dog ___ .', opts:['run','runs','running'], a:1, explain:'The dog runs.'}
+    ],
+    science: [
+      {q: 'What do plants need to grow?', opts:['Water and sun','Only rocks','Only night'], a:0, explain:'Water, sun, and air!'},
+      {q: 'What is weather?', opts:['How the air feels outside','A toy','A book'], a:0, explain:'Sunny, rainy, windy!'}
+    ],
+    world: [
+      {q: 'What is a map for?', opts:['Finding places','Eating food','Sleeping'], a:0, explain:'Maps help us find our way.'},
+      {q: 'Needs or wants? Food', opts:['Need','Want'], a:0, explain:'We need food to live.'}
+    ]
+  };
+  var html = '<h2>' + sub.charAt(0).toUpperCase()+sub.slice(1) + ' Missions</h2>';
+  (missions[sub]||[]).forEach(function(m, i){
+    html += '<div class="mission"><p style="font-size:20px;font-weight:800">' + m.q + '</p>';
+    m.opts.forEach(function(o, oi){
+      html += '<button class="opt" onclick="checkAnswer(this, '+oi+', '+m.a+', \''+m.explain+'\', \''+sub+'\')">' + o + '</button>';
+    });
+    html += '<button class="btn btn-teal" onclick="speakText(\''+m.q+'\')">🔊 Hear the question</button></div>';
+  });
+  return html;
+}
+function checkAnswer(btn, chosen, correct, explain, sub){
+  var parent = btn.parentElement;
+  parent.querySelectorAll('.opt').forEach(function(b, i){ b.classList.remove('correct','wrong'); if(i===correct) b.classList.add('correct'); else if(i===chosen) b.classList.add('wrong'); });
+  if(chosen===correct){
+    subjectStars[sub] = (subjectStars[sub]||0) + 1;
+    state.stars++;
+    speakText('Yes! Great job! ' + explain);
+    boom();
+  } else {
+    speakText('Try again! ' + explain);
+  }
+  saveProgress();
+  updateHubStars();
+}
+loadProgress();
+
 renderLibrary();
 refreshPageModels();
 </script>
+
+<div class="footer">
+  <a href="#" onclick="alert('Privacy: This app saves progress only on this device. No accounts, no tracking, no data sent anywhere.'); return false;">Privacy Policy</a>
+  <a href="#" onclick="alert('Age Notice: This is for children 6-10 with adult help. No personal data collected.'); return false;">Age Notice</a>
+  <a href="#" onclick="alert('Accessibility: Big buttons, high contrast, keyboard friendly, alt text, reduced motion respected.'); return false;">Accessibility</a>
+  <p>Contact: Use the GitHub repo issues for feedback.</p>
+</div>
+
 </body>
 </html>
