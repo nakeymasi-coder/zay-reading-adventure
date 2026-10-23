@@ -109,7 +109,7 @@ input,select,textarea{width:100%;padding:13px 14px;border:2px solid #E2E8F0;bord
 </style>
 </head>
 <body>
-<button id="backBtn" class="back-fixed" onclick="backToHub()">← Back to Subjects</button>
+<button id="backBtn" class="back-fixed" onclick="backToHub()">🏠 Home</button>
 
 <div id="hub" class="hub">
   <h1>Zay’s Adventure Hub</h1>
@@ -122,6 +122,11 @@ input,select,textarea{width:100%;padding:13px 14px;border:2px solid #E2E8F0;bord
     <div class="subj" onclick="showSubject('world')"><h2>🌍 My World</h2><p>Maps & life skills</p></div>
   </div>
   <div id="starsDisplay" style="text-align:center;font-size:22px;font-weight:900;margin:10px">★ 0 stars</div>
+
+<div style="text-align:center;margin:10px 0">
+  <button class="btn btn-blue" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="font-size:18px;padding:12px 24px">🏠 Home</button>
+</div>
+
 </div>
 <button class="adult" onclick="toggleDrawer()">Adult Controls</button>
 <div id="drawer" class="drawer">
