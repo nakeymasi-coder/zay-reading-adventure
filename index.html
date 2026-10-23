@@ -102,9 +102,14 @@ input,select,textarea{width:100%;padding:13px 14px;border:2px solid #E2E8F0;bord
 .footer a {color:#0F6BFF;font-weight:800;margin:0 8px}
 @media (max-width:700px) {.subjects{grid-template-columns:1fr 1fr} .hero{grid-template-columns:1fr} .hero h1{font-size:36px}}
 
+
+.back-fixed {position:fixed;top:16px;left:16px;z-index:300;background:#0F6BFF;color:#fff;border:0;border-radius:999px;padding:12px 18px;font-weight:900;font-size:16px;box-shadow:0 4px 0 #0A4CB3;display:none}
+.back-fixed:active {transform:translateY(2px);box-shadow:none}
+
 </style>
 </head>
 <body>
+<button id="backBtn" class="back-fixed" onclick="backToHub()">← Back to Subjects</button>
 
 <div id="hub" class="hub">
   <h1>Zay’s Adventure Hub</h1>
@@ -525,6 +530,7 @@ function showSubject(sub){
   document.getElementById('hub').style.display='none';
   document.getElementById('subjectView').style.display='block';
   document.getElementById('originalApp').style.display = sub==='reading' ? 'block' : 'none';
+  document.getElementById('backBtn').style.display='block';
   if(sub==='reading'){ renderLibrary(); return; }
   var content = getMissions(sub);
   document.getElementById('subjectView').innerHTML = '<div class="hub"><button class="btn btn-blue" onclick="backToHub()">← Back to Hub</button>' + content + '</div>';
@@ -534,6 +540,7 @@ function backToHub(){
   document.getElementById('hub').style.display='block';
   document.getElementById('subjectView').style.display='none';
   document.getElementById('originalApp').style.display='none';
+  document.getElementById('backBtn').style.display='none';
   updateHubStars();
 }
 function toggleDrawer(){ document.getElementById('drawer').classList.toggle('open'); }
